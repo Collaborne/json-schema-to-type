@@ -1,5 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
 interface SchemaTypeNames {
 	'string': string;
 	'boolean': boolean;
@@ -40,7 +38,6 @@ export type OptionalProperties<S extends ObjectSchema> = {
 export type AdditionalProperties<S extends ObjectSchema> =
 	S extends { additionalProperties: true; } ? {[k: string]: any} :
 	S extends { additionalProperties: Schema; } ? {[k: string]: SchemaType<S['additionalProperties']>} :
-	// eslint-disable-next-line @typescript-eslint/ban-types
 	{};
 
 /**
