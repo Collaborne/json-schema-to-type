@@ -1,0 +1,26 @@
+{
+  "name": "@collaborne/json-schema-to-type",
+  "version": "1.0.0",
+  "description": "Translate a (static) JSON schema to a TypeScript type",
+  "types": "schema-to-type.d.ts",
+  "scripts": {
+    "test": "tsc --noEmit test/*.compile.ts"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Collaborne/json-schema-to-type.git"
+  },
+  "author": "Andreas Kohn <andreas.kohn@gmail.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/Collaborne/json-schema-to-type/issues"
+  },
+  "homepage": "https://github.com/Collaborne/json-schema-to-type#readme",
+  "files": [
+    "LICENSE",
+    "schema-to-type.d.ts"
+  ],
+  "devDependencies": {
+    "typescript": "^4.1.3"
+  }
+}
