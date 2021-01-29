@@ -13,10 +13,18 @@ type ObjectSchema = {
 	properties?: Record<string, Schema>;
 	additionalProperties?: boolean|Schema;
 };
-type ArraySchema = {
+type ArrayListSchema = {
 	type: 'array';
-	items?: Schema;
+	items: Schema;
 };
+type ArrayTupleSchema = {
+	type: 'array';
+	items: readonly Schema[];
+};
+type ArrayAnySchema = {
+	type: 'array';
+};
+type ArraySchema = ArrayListSchema|ArrayTupleSchema|ArrayAnySchema;
 type PrimitiveSchema = {
 	type: keyof SchemaTypeNames;
 };
@@ -70,6 +78,16 @@ type RecursiveAllOf<A extends readonly Schema[]> = {
 	1: SchemaType<A[0]>&RecursiveAllOf<Tail<A>>,
 }[Length<A> extends 0 ? 0 : 1];
 
+type RecursiveItems<A extends readonly Schema[]> = {
+	0: [],
+	1: [SchemaType<A[0]>, ...RecursiveItems<Tail<A>>],
+}[Length<A> extends 0 ? 0 : 1];
+
+type ArrayItemsType<I> =
+	I extends Schema ? SchemaType<I>[] :
+	I extends readonly Schema[] ? RecursiveItems<I> :
+	any[];
+
 /**
  * Type created from a JSON schema definition
  *
@@ -78,7 +96,9 @@ type RecursiveAllOf<A extends readonly Schema[]> = {
  */
 export type SchemaType<S> =
 	S extends ObjectSchema ? RequiredProperties<S> & OptionalProperties<S> & AdditionalProperties<S> :
-	S extends ArraySchema ? (S extends { items: Schema } ? SchemaType<S['items']>[] : any[]) :
+	S extends ArrayListSchema ? SchemaType<S['items']>[] :
+	S extends ArrayTupleSchema ? RecursiveItems<S['items']> :
+	S extends ArrayAnySchema ? any[] :
 	S extends PrimitiveSchema ? SchemaTypeNames[S['type']] :
 	S extends AllOfSchema ? RecursiveAllOf<S['allOf']> :
 	S extends OneOfSchema ? RecursiveOneOf<S['oneOf']> :
