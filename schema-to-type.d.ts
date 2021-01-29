@@ -83,4 +83,4 @@ export type SchemaType<S> =
 	S extends AllOfSchema ? RecursiveAllOf<S['allOf']> :
 	S extends OneOfSchema ? RecursiveOneOf<S['oneOf']> :
 	S extends AnyOfSchema ? RecursiveAnyOf<S['anyOf']> :
-	S extends Schema ? 'BUG: Unsupported "type" value' : never;
+	S extends Schema ? 'BUG: Unsupported "type" value' : 'Not a JSON Schema';
